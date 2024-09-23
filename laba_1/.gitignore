@@ -1,9 +1,5 @@
-/gradle.properties
-gradle.properties
-.gradle.properties
 *.iml
 .gradle
-/local.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -16,4 +12,4 @@ gradle.properties
 .externalNativeBuild
 .cxx
 local.properties
-
+gradle.properties
