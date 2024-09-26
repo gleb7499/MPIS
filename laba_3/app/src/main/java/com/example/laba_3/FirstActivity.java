@@ -3,9 +3,9 @@ package com.example.laba_3;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +18,42 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class FirstActivity extends AppCompatActivity {
 
+    @Override
+    protected void onStop() {
+        Log.d("FirstActivity", "onStop called");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("FirstActivity", "onPause called");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("FirstActivity", "onResume called");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d("FirstActivity", "onStart called");
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("FirstActivity", "onDestroy called");
+        super.onDestroy();
+    }
+
     private Button buttonCallTaxi;
     private TextView textViewRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("FirstActivity", "onCreate called");
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_first);

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">laba_3</string>
     <string name="name_and_lastname">%s %s</string>
+    <string name="log_in">Log in</string>
 </resources>

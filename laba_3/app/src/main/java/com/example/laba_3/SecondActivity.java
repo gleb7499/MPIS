@@ -2,6 +2,7 @@ package com.example.laba_3;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -14,7 +15,38 @@ import androidx.core.view.WindowInsetsCompat;
 public class SecondActivity extends AppCompatActivity {
 
     @Override
+    protected void onStop() {
+        Log.d("SecondActivity", "onStop called");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("SecondActivity", "onPause called");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("SecondActivity", "onResume called");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d("SecondActivity", "onStart called");
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("SecondActivity", "onDestroy called");
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("SecondActivity", "onCreate called");
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_second);
