@@ -170,8 +170,8 @@ public class SearchFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
 
             String accessKey = BuildConfig.UNSPLASH_ACCESS_KEY;
-            String url = "https://pixabay.com/api/?key=" + accessKey + "&q=" + query.replaceAll(" ", "+") + " &image_type=photo&pretty=true&lang=ru&orientation=vertical&per_page=3";
-
+            String url = "https://pixabay.com/api/?key=" + accessKey + "&q=" + query.replaceAll(" ", "+") + "&image_type=photo&pretty=true&lang=ru&orientation=vertical&per_page=3";
+            Log.d("URL_string", url);
             new FetchImageTask().execute(url);
 
             Title = query;
