@@ -10,11 +10,11 @@ public class Photo {
     private String downloads;
     private String likes;
     private String comments;
-    private String user_id;
+    private String user;
     private String userImageURL;
 
 
-    public Photo(String id, String pageURL, String tags, String largeImageURL, String views, String downloads, String likes, String comments, String user_id, String userImageURL) {
+    public Photo(String id, String pageURL, String tags, String largeImageURL, String views, String downloads, String likes, String comments, String user, String userImageURL) {
         this.id = id;
         this.pageURL = pageURL;
         this.tags = tags;
@@ -23,7 +23,7 @@ public class Photo {
         this.downloads = downloads;
         this.likes = likes;
         this.comments = comments;
-        this.user_id = user_id;
+        this.user = user;
         this.userImageURL = userImageURL;
     }
 
@@ -59,8 +59,8 @@ public class Photo {
         this.comments = comments;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public void setUserImageURL(String userImageURL) {
@@ -99,8 +99,8 @@ public class Photo {
         return comments;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUser() {
+        return user;
     }
 
     public String getUserImageURL() {

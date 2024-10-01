@@ -14,6 +14,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "UNSPLASH_ACCESS_KEY",
+            "\"${project.properties["UNSPLASH_ACCESS_KEY"]}\""
+        )
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -40,4 +50,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(libs.glide)
+    implementation(libs.okhttp3.okhttp)
+    implementation(libs.gson)
+    annotationProcessor(libs.compiler)
+
 }

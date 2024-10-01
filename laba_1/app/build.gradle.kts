@@ -16,7 +16,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "UNSPLASH_ACCESS_KEY", "\"${project.properties["UNSPLASH_ACCESS_KEY"]}\"")
+        buildConfigField(
+            "String",
+            "UNSPLASH_ACCESS_KEY",
+            "\"${project.properties["UNSPLASH_ACCESS_KEY"]}\""
+        )
     }
 
     buildFeatures {
