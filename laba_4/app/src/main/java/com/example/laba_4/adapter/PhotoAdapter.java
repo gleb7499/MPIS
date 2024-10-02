@@ -40,16 +40,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        Glide.with(context).load(photos.get(position).getUser()).into(holder.imageViewUser);
+        Glide.with(context).load(photos.get(position).getUserImageURL()).into(holder.imageViewUser);
         holder.textViewUser.setText(photos.get(position).getUser());
         Glide.with(context).load(photos.get(position).getLargeImageURL()).into(holder.imageViewLarge);
     }
 
     public static final class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imageViewUser;
-        public TextView textViewUser;
-        public ImageView imageViewLarge;
+        private final ImageView imageViewUser;
+        private final TextView textViewUser;
+        private final ImageView imageViewLarge;
 
         public PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
