@@ -2,17 +2,16 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
-
 android {
-    namespace = "com.example.laba_1"
+    namespace = "com.example.laba_4"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.laba_1"
+        applicationId = "com.example.laba_4"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -26,7 +25,6 @@ android {
     buildFeatures {
         buildConfig = true
     }
-
 
     buildTypes {
         release {
@@ -54,5 +52,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation(libs.glide)
+    implementation(libs.okhttp3.okhttp)
+    implementation(libs.gson)
     annotationProcessor(libs.compiler)
+
 }
