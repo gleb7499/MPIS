@@ -25,6 +25,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +52,7 @@ public class SearchFragment extends Fragment {
     private ProgressBar progressBar;
     private EditText editText;
     private ImageView imageView;
+    private CardView cardView;
 
     private String ImageURL = "";
     private String pageURL = "";
@@ -70,6 +72,7 @@ public class SearchFragment extends Fragment {
         Button button = view.findViewById(R.id.button_for_searching);
         editText = view.findViewById(R.id.input_for_searching);
         imageView = view.findViewById(R.id.imageView);
+        cardView = view.findViewById(R.id.cardView);
 
 
         // Установить прослушку
@@ -166,7 +169,7 @@ public class SearchFragment extends Fragment {
     public void ButtonClick(View view) {
         String query = editText.getText().toString();
         if (!query.isEmpty()) {
-            imageView.setVisibility(View.INVISIBLE);
+            cardView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
             String accessKey = BuildConfig.UNSPLASH_ACCESS_KEY;
@@ -241,7 +244,7 @@ public class SearchFragment extends Fragment {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         Log.d("Glide", "onResourceReady");
-                        imageView.setVisibility(View.VISIBLE);
+                        cardView.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
                         return false;
                     }
