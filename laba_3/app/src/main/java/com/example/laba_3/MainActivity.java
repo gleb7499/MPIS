@@ -46,12 +46,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d("MainActivity", "onDestroy called");
         super.onDestroy();
-        sharedPreferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("name", editTextName.getText().toString());
-        editor.putString("lastname", editTextLastname.getText().toString());
-        editor.putString("phone", editTextPhone.getText().toString());
-        editor.apply();
     }
 
     @Override
@@ -94,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 final String phone = editTextPhone.getText().toString();
 
                 if (!name.isEmpty() && !lastname.isEmpty() && !phone.isEmpty()) {
+                    savePreferences();
                     intent.putExtra("name", name);
                     intent.putExtra("lastname", lastname);
                     intent.putExtra("phone", phone);
@@ -101,5 +96,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void savePreferences() {
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("name", editTextName.getText().toString());
+        editor.putString("lastname", editTextLastname.getText().toString());
+        editor.putString("phone", editTextPhone.getText().toString());
+        editor.apply();
     }
 }
