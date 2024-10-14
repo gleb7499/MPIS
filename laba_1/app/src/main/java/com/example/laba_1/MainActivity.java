@@ -13,11 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-
-    BottomNavigationView bottomNavigationView;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        PersonFragment personFragment = new PersonFragment();
+        SearchFragment searchFragment = new SearchFragment();
 
         ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -37,35 +38,30 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return WindowInsetsCompat.CONSUMED;
         });
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.search:
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.constlayout, searchFragment)
+                                .commit();
+                        return true;
+
+                    case R.id.person:
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.constlayout, personFragment)
+                                .commit();
+                        return true;
+                }
+                return false;
+            }
+        });
         bottomNavigationView.setSelectedItemId(R.id.search);
 
     }
 
-    PersonFragment personFragment = new PersonFragment();
-    SearchFragment searchFragment = new SearchFragment();
-
-    // Переключение экранов нижней панели
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean
-    onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.search:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.constlayout, searchFragment)
-                        .commit();
-                return true;
-
-            case R.id.person:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.constlayout, personFragment)
-                        .commit();
-                return true;
-        }
-        return false;
-    }
 }
