@@ -1,4 +1,4 @@
-package com.example.laba_5.Fragments;
+package com.example.laba_5.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
