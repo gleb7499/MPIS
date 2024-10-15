@@ -1,14 +1,19 @@
 package com.example.laba_5.Database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 
 import com.example.laba_5.Notes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
 
@@ -28,6 +33,17 @@ public class Database {
         values.put("content", note.getContent());
         db.insertOrThrow("Notes", null, values);
         return true;
+    }
+
+    public List<Notes> getAllNotes() {
+        Cursor cursor = db.query("Notes", null, null, null, null, null, null);
+        List<Notes> notes = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String content = cursor.getString(cursor.getColumnIndex("content"));
+            notes.add(new Notes(content));
+        }
+        cursor.close();
+        return notes;
     }
 
     private boolean existsNote(String content) {
