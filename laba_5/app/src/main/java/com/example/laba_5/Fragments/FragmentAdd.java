@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.laba_5.Database.Database;
 import com.example.laba_5.Database.DatabaseManager;
 import com.example.laba_5.Model.Notes;
+import com.example.laba_5.Model.NotesManager;
 import com.example.laba_5.R;
 
 public class FragmentAdd extends Fragment {
@@ -42,8 +43,10 @@ public class FragmentAdd extends Fragment {
     public void addNote(View view) {
         String text = editText.getText().toString();
         if (!text.isEmpty()) {
-            if (database.addNote(new Notes(text))) {
+            Notes note = new Notes(text) ;
+            if (database.addNote(note)) {
                 Toast.makeText(getContext(), "Note added!", Toast.LENGTH_SHORT).show();
+                NotesManager.addNote(note);
                 editText.setText("");
             } else {
                 Toast.makeText(getContext(), "Note already exists", Toast.LENGTH_SHORT).show();

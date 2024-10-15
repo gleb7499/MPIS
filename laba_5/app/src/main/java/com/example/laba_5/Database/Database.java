@@ -49,7 +49,6 @@ public class Database {
         int id = getIdByNoteNumber(noteNumber);
         if (id != -1) {
             int result = db.delete("Notes", "id = ?", new String[] { String.valueOf(id) });
-
             return result > 0;
         } else {
             return false;

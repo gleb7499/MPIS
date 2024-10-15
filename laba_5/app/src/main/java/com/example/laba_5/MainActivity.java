@@ -18,6 +18,7 @@ import com.example.laba_5.Fragments.FragmentAdd;
 import com.example.laba_5.Fragments.FragmentDel;
 import com.example.laba_5.Fragments.FragmentShow;
 import com.example.laba_5.Fragments.FragmentUpdate;
+import com.example.laba_5.Model.NotesManager;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         DatabaseManager.getDatabase().close();
+        NotesManager.clearNotes();
         super.onDestroy();
     }
 
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DatabaseManager.setDatabase(this);
+
+        NotesManager.initializeNotes();
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.ViewPager);

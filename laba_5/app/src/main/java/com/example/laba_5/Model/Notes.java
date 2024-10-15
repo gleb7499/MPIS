@@ -2,7 +2,7 @@ package com.example.laba_5.Model;
 
 public class Notes {
 
-    private final String content;
+    private String content;
 
     public Notes(String content) {
         this.content = content;
@@ -10,5 +10,9 @@ public class Notes {
 
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

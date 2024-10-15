@@ -15,6 +15,7 @@ import com.example.laba_5.Adapters.RecyclerViewNotesAdapter;
 import com.example.laba_5.Database.Database;
 import com.example.laba_5.Database.DatabaseManager;
 import com.example.laba_5.Model.Notes;
+import com.example.laba_5.Model.NotesManager;
 import com.example.laba_5.R;
 
 import java.util.List;
@@ -22,7 +23,6 @@ import java.util.List;
 public class FragmentShow extends Fragment {
 
     private Database database;
-    private List<Notes> notes;
     private RecyclerViewNotesAdapter recyclerViewNotesAdapter;
     private RecyclerView recyclerView;
     private TextView textViewNothing;
@@ -48,10 +48,10 @@ public class FragmentShow extends Fragment {
     }
 
     private void addNote() {
-        notes = database.getAllNotes();
-        recyclerViewNotesAdapter = new RecyclerViewNotesAdapter(getContext(), notes);
+        NotesManager.addNotes(database.getAllNotes());
+        recyclerViewNotesAdapter = new RecyclerViewNotesAdapter(getContext(), NotesManager.getNotes());
         recyclerView.setAdapter(recyclerViewNotesAdapter);
-        textViewNothing.setVisibility(notes.isEmpty() ? View.VISIBLE : View.INVISIBLE);
-        recyclerView.setVisibility(notes.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+        textViewNothing.setVisibility(NotesManager.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+        recyclerView.setVisibility(NotesManager.isEmpty() ? View.INVISIBLE : View.VISIBLE);
     }
 }

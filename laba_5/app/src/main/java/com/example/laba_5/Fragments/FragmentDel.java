@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.laba_5.Database.Database;
 import com.example.laba_5.Database.DatabaseManager;
 import com.example.laba_5.Model.Notes;
+import com.example.laba_5.Model.NotesManager;
 import com.example.laba_5.R;
 
 public class FragmentDel extends Fragment {
@@ -39,9 +40,14 @@ public class FragmentDel extends Fragment {
     }
 
     private void click() {
+        if (NotesManager.isEmpty()) {
+            Toast.makeText(getContext(), "There are no notes", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int content = editText.getText().toString().isEmpty() ? 0 : Integer.parseInt(editText.getText().toString());
-        if (content > 0 && database.delNote(content)) {
+        if (content > 0 && content <= NotesManager.getNotesSize() && database.delNote(content)) {
             Toast.makeText(getContext(), "Note deleted!", Toast.LENGTH_SHORT).show();
+            NotesManager.delNote(content);
             editText.setText("");
         } else {
             Toast.makeText(getContext(), "There are no notes under this number", Toast.LENGTH_SHORT).show();
