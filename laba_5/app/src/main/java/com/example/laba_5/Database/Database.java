@@ -6,11 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 
-import com.example.laba_5.Notes;
+import com.example.laba_5.Model.Notes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +45,31 @@ public class Database {
         return notes;
     }
 
+    public boolean delNote(int noteNumber) {
+        int id = getIdByNoteNumber(noteNumber);
+        if (id != -1) {
+            int result = db.delete("Notes", "id = ?", new String[] { String.valueOf(id) });
+
+            return result > 0;
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressLint("Range")
+    private int getIdByNoteNumber(int noteNumber) {
+        Cursor cursor = db.query("Notes", new String[] { "id" }, null, null, null, null, null);
+        int id = -1;
+        while (cursor.moveToNext()) {
+            id = cursor.getInt(cursor.getColumnIndex("id"));
+            if (cursor.getPosition() == noteNumber - 1) {
+                break;
+            }
+        }
+        cursor.close();
+        return id;
+    }
+
     private boolean existsNote(String content) {
         boolean flag;
         Cursor cursor = db.query("Notes", null, "content = ?", new String[] { content }, null, null, null);
@@ -70,12 +94,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(@NonNull SQLiteDatabase db) {
         db.execSQL("CREATE TABLE Notes (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT)");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Notes");
         onCreate(db);
     }

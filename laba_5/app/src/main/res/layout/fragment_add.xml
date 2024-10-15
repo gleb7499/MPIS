@@ -27,6 +27,7 @@
         android:autofillHints=""
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Заметка (до 100 символов)"
         android:inputType="textMultiLine"
         android:maxLength="100"
         android:textSize="20sp"

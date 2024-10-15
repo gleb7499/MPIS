@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.laba_5.Adapters.RecyclerViewNotesAdapter;
 import com.example.laba_5.Database.Database;
 import com.example.laba_5.Database.DatabaseManager;
-import com.example.laba_5.Notes;
+import com.example.laba_5.Model.Notes;
 import com.example.laba_5.R;
 
 import java.util.List;
@@ -49,14 +49,9 @@ public class FragmentShow extends Fragment {
 
     private void addNote() {
         notes = database.getAllNotes();
-        if (!notes.isEmpty()) {
-            recyclerViewNotesAdapter = new RecyclerViewNotesAdapter(getContext(), notes);
-            recyclerView.setAdapter(recyclerViewNotesAdapter);
-            textViewNothing.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        } else {
-            textViewNothing.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        }
+        recyclerViewNotesAdapter = new RecyclerViewNotesAdapter(getContext(), notes);
+        recyclerView.setAdapter(recyclerViewNotesAdapter);
+        textViewNothing.setVisibility(notes.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+        recyclerView.setVisibility(notes.isEmpty() ? View.INVISIBLE : View.VISIBLE);
     }
 }

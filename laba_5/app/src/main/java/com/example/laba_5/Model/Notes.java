@@ -1,4 +1,4 @@
-package com.example.laba_5;
+package com.example.laba_5.Model;
 
 public class Notes {
 

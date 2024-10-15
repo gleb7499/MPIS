@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.laba_5.Notes;
+import com.example.laba_5.Model.Notes;
 import com.example.laba_5.R;
 
 import java.util.List;
