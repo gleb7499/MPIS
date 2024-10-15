@@ -32,8 +32,8 @@ public class NotesManager {
         return notes.size();
     }
 
-    public static Notes getNote(int number) {
-        return notes.get(number - 1);
+    public static String getNote(int number) {
+        return notes.get(number - 1).getContent();
     }
 
     public static List<Notes> getNotes() {

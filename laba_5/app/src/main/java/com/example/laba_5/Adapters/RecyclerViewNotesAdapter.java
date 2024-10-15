@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.laba_5.Model.Notes;
+import com.example.laba_5.Model.NotesManager;
 import com.example.laba_5.R;
 
 import java.util.List;
@@ -17,11 +18,9 @@ import java.util.List;
 public class RecyclerViewNotesAdapter extends RecyclerView.Adapter<RecyclerViewNotesAdapter.NotesViewHolder> {
 
     private final Context context;
-    private final List<Notes> notes;
 
     public RecyclerViewNotesAdapter(Context context, List<Notes> notes) {
         this.context = context;
-        this.notes = notes;
     }
 
     @NonNull
@@ -34,12 +33,12 @@ public class RecyclerViewNotesAdapter extends RecyclerView.Adapter<RecyclerViewN
     @Override
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
         holder.textViewNumberNote.setText(String.valueOf(position + 1));
-        holder.textViewForNote.setText(notes.get(position).getContent());
+        holder.textViewForNote.setText(NotesManager.getNote(position + 1));
     }
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return NotesManager.getNotesSize();
     }
 
     public static final class NotesViewHolder extends RecyclerView.ViewHolder {
