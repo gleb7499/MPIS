@@ -15,7 +15,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:tabIndicatorAnimationDuration="1000"
+        app:tabIndicatorFullWidth="true"
+        app:tabPaddingBottom="15dp"
+        app:tabPaddingTop="25dp"
+        app:tabTextAppearance="@style/TabTextAppearance" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/ViewPager"
