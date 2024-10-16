@@ -55,6 +55,21 @@ public class Database {
         }
     }
 
+    public boolean updateNote(int noteNumber, String note) {
+        if (existsNote(note)) {
+            return false;
+        }
+        int id = getIdByNoteNumber(noteNumber);
+        if (id != -1) {
+            ContentValues values = new ContentValues();
+            values.put("content", note);
+            int result = db.update("Notes", values, "id = ?", new String[] { String.valueOf(id) });
+            return result > 0;
+        } else {
+            return false;
+        }
+    }
+
     @SuppressLint("Range")
     private int getIdByNoteNumber(int noteNumber) {
         Cursor cursor = db.query("Notes", new String[] { "id" }, null, null, null, null, null);

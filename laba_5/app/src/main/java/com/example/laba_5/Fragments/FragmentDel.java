@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.laba_5.Database.Database;
 import com.example.laba_5.Database.DatabaseManager;
-import com.example.laba_5.Model.Notes;
 import com.example.laba_5.Model.NotesManager;
 import com.example.laba_5.R;
 
@@ -29,7 +28,7 @@ public class FragmentDel extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_del, container, false);
         database = DatabaseManager.getDatabase();
-        editText = view.findViewById(R.id.editText);
+        editText = view.findViewById(R.id.editTextNumNote);
         view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,13 +43,16 @@ public class FragmentDel extends Fragment {
             Toast.makeText(getContext(), "There are no notes", Toast.LENGTH_SHORT).show();
             return;
         }
-        int content = editText.getText().toString().isEmpty() ? 0 : Integer.parseInt(editText.getText().toString());
-        if (content > 0 && content <= NotesManager.getNotesSize() && database.delNote(content)) {
-            Toast.makeText(getContext(), "Note deleted!", Toast.LENGTH_SHORT).show();
-            NotesManager.delNote(content);
-            editText.setText("");
-        } else {
-            Toast.makeText(getContext(), "There are no notes under this number", Toast.LENGTH_SHORT).show();
+        String NumNoteStr = editText.getText().toString();
+        if (!NumNoteStr.isEmpty()) {
+            int content = Integer.parseInt(NumNoteStr);
+            if (content > 0 && content <= NotesManager.getNotesSize() && database.delNote(content)) {
+                Toast.makeText(getContext(), "Note deleted!", Toast.LENGTH_SHORT).show();
+                NotesManager.delNote(content);
+                editText.setText("");
+            } else {
+                Toast.makeText(getContext(), "There are no notes under this number", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

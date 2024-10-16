@@ -28,7 +28,7 @@ public class FragmentAdd extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
         database = DatabaseManager.getDatabase();
-        editText = view.findViewById(R.id.editText);
+        editText = view.findViewById(R.id.editTextNumNote);
 
         view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
