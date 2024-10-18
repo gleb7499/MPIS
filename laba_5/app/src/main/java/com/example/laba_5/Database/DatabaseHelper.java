@@ -10,9 +10,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Notes.db";
     private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_PATH = "/data/user/0/com.example.laba_5/Database/";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_PATH + DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
