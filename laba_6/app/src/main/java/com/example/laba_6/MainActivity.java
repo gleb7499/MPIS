@@ -1,11 +1,12 @@
 package com.example.laba_6;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonDelete;
     private TextView textView;
     private String url;
+    private String last_download;
 
     private void setMargins(View view) {
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
@@ -90,6 +93,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonWatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickButtonWatch();
+            }
+        });
+    }
+
+    private void clickButtonWatch() {
+        try {
+            File file = new File(last_download);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+            startActivity(intent);
+        } catch (Exception e) {
+            showError("Приложение для открытия pdf не установлено");
+        }
     }
 
     private void clickImageButtonFind() {
@@ -97,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
         if (!query.isEmpty()) {
             url = "https://ntv.ifmo.ru/file/journal/" + query.strip() + ".pdf";
 
-            new OkHttpClient().newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
+            textView.setHint("Поиск файла...");
+
+            new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build().newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     showError("Ошибка запроса:\n" + e.getMessage());
@@ -110,22 +132,31 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                textView.setHint("Файл найден :)");
-                                buttonWatch.setAlpha(1.0f);
-                                buttonDelete.setAlpha(1.0f);
-                                buttonWatch.setClickable(true);
-                                buttonDelete.setClickable(true);
+                                textView.setHint("Файл найден\nЗагрузка...");
+
+                                Handler handler = new Handler(Looper.getMainLooper());
 
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
-                                            Response downloadResponse = new OkHttpClient().newCall(new Request.Builder().url(url).build()).execute();
+                                            Response downloadResponse = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build().newCall(new Request.Builder().url(url).build()).execute();
                                             String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + query.strip() + ".pdf";
                                             FileOutputStream outputStream = new FileOutputStream(path);
                                             BufferedSink sink = Okio.buffer(Okio.sink(outputStream));
                                             sink.writeAll(downloadResponse.body().source());
                                             sink.close();
+                                            handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    last_download = path;
+                                                    textView.setHint("Файл загружен\n" + last_download);
+                                                    buttonWatch.setAlpha(1.0f);
+                                                    buttonDelete.setAlpha(1.0f);
+                                                    buttonWatch.setClickable(true);
+                                                    buttonDelete.setClickable(true);
+                                                }
+                                            });
                                         } catch (IOException e) {
                                             showError("Ошибка скачивания:\n" + e.getMessage());
                                         }
