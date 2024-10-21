@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
-        android:hint="Введите номер журанала"
+        android:hint="Например, 135"
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -27,6 +27,7 @@
         android:id="@+id/cardView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:backgroundTint="@android:color/transparent"
         android:elevation="0dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,25 +37,57 @@
         app:layout_constraintVertical_bias="0.251">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imageButtonFind"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/download"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
+        android:id="@+id/buttonWatch"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:text="Смотреть"
+        android:textSize="18dp"
+        app:cornerRadius="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
         app:layout_constraintVertical_bias="0.8" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:text="Удалить"
+        android:textSize="18dp"
+        app:cornerRadius="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonWatch"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Введите номер журанала "
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonWatch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
