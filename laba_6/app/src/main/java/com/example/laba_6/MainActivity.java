@@ -1,12 +1,10 @@
 package com.example.laba_6;
 
-import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
@@ -48,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonDelete;
     private TextView textView;
     private String url;
-    private String last_download;
+    private File last_file;
+    private File folder;
 
     private void setMargins(View view) {
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
@@ -75,13 +73,22 @@ public class MainActivity extends AppCompatActivity {
         buttonDelete = findViewById(R.id.buttonDelete);
         textView = findViewById(R.id.textView);
 
-        setMargins(buttonWatch);
-        setMargins(buttonDelete);
-
         buttonWatch.setAlpha(0.5f);
         buttonDelete.setAlpha(0.5f);
         buttonWatch.setClickable(false);
         buttonDelete.setClickable(false);
+
+        textView.setHint("Введите номер журанала");
+
+        folder = new File(getFilesDir(), "journals");
+        if (!folder.exists()) {
+            if (!folder.mkdir()) {
+                showError("Не удается создать папку!", false);
+            }
+        }
+
+        setMargins(buttonWatch);
+        setMargins(buttonDelete);
 
         editTextNumber.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -132,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void run() {
                                         try {
                                             Response downloadResponse = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build().newCall(new Request.Builder().url(url).build()).execute();
-                                            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + query.strip() + ".pdf";
+                                            String path = folder + "/" + query.strip() + ".pdf";
                                             FileOutputStream outputStream = new FileOutputStream(path);
                                             BufferedSink sink = Okio.buffer(Okio.sink(outputStream));
                                             sink.writeAll(downloadResponse.body().source());
@@ -140,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
                                             handler.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    last_download = path;
-                                                    textView.setHint("Файл загружен\n" + last_download);
+                                                    last_file = new File(path);
+                                                    textView.setHint("Файл загружен\n" + path);
                                                     buttonWatch.setAlpha(1.0f);
                                                     buttonDelete.setAlpha(1.0f);
                                                     buttonWatch.setClickable(true);
@@ -167,20 +174,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickButtonWatch(View view) {
         try {
-            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(last_download));
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", last_file);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri, "application/pdf");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                showError("Нет приложения для открытия PDF!", true);
+            }
         } catch (Exception e) {
             showError("Ошибка открытия файла:\n" + e.getMessage(), true);
         }
     }
 
     public void clickButtonDelete(View view) {
-        File file = new File(last_download);
-        if (file.exists()) {
-            if (file.delete()) {
+        if (last_file.exists()) {
+            if (last_file.delete()) {
                 showError("Файл удален!", false);
             } else {
                 showError("Ошибка удаления файла!", false);
