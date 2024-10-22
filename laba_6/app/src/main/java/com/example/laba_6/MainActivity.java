@@ -103,18 +103,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void clickButtonWatch(View view) {
-        try {
-            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(last_download));
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(intent);
-        } catch (Exception e) {
-            showError("Ошибка открытия файла:\n" + e.getMessage(), true);
-        }
-    }
-
     private void clickImageButtonFind() {
         String query = editTextNumber.getText().toString();
         if (!query.isEmpty()) {
@@ -174,6 +162,31 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             showError("Заполните поле!", false);
+        }
+    }
+
+    public void clickButtonWatch(View view) {
+        try {
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(last_download));
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        } catch (Exception e) {
+            showError("Ошибка открытия файла:\n" + e.getMessage(), true);
+        }
+    }
+
+    public void clickButtonDelete(View view) {
+        File file = new File(last_download);
+        if (file.exists()) {
+            if (file.delete()) {
+                showError("Файл удален!", false);
+            } else {
+                showError("Ошибка удаления файла!", false);
+            }
+        } else {
+            showError("Файл не существует!", false);
         }
     }
 

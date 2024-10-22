@@ -72,6 +72,7 @@
         android:layout_height="55dp"
         android:alpha="0.5"
         android:clickable="false"
+        android:onClick="clickButtonDelete"
         android:text="Удалить"
         android:textSize="18sp"
         app:cornerRadius="17dp"
