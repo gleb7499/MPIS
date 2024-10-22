@@ -1,7 +1,9 @@
 package com.example.laba_6;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,7 +20,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -74,12 +78,17 @@ public class MainActivity extends AppCompatActivity {
         setMargins(buttonWatch);
         setMargins(buttonDelete);
 
+        buttonWatch.setAlpha(0.5f);
+        buttonDelete.setAlpha(0.5f);
+        buttonWatch.setClickable(false);
+        buttonDelete.setClickable(false);
+
         editTextNumber.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    clickImageButtonFind();
                     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(editTextNumber.getWindowToken(), 0);
+                    clickImageButtonFind();
                     return true;
                 }
                 return false;
@@ -92,23 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 clickImageButtonFind();
             }
         });
-
-        buttonWatch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickButtonWatch();
-            }
-        });
     }
 
-    private void clickButtonWatch() {
+    public void clickButtonWatch(View view) {
         try {
-            File file = new File(last_download);
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(last_download));
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
         } catch (Exception e) {
-            showError("Приложение для открытия pdf не установлено");
+            showError("Ошибка открытия файла:\n" + e.getMessage(), true);
         }
     }
 
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build().newCall(new Request.Builder().url(url).build()).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    showError("Ошибка запроса:\n" + e.getMessage());
+                    showError("Ошибка запроса:\n" + e.getMessage(), false);
                 }
 
                 @Override
@@ -158,31 +161,34 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                         } catch (IOException e) {
-                                            showError("Ошибка скачивания:\n" + e.getMessage());
+                                            showError("Ошибка скачивания:\n" + e.getMessage(), false);
                                         }
                                     }
                                 }).start();
                             }
                         });
                     } else {
-                        showError("Файл не найден :(");
+                        showError("Файл не найден :(", false);
                     }
                 }
             });
         } else {
-            showError("Заполните поле!");
+            showError("Заполните поле!", false);
         }
     }
 
-    private void showError(final String errorMessage) {
+    private void showError(final String errorMessage, boolean buttons_is_visible) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 textView.setHint(errorMessage);
-                buttonWatch.setAlpha(0.5f);
-                buttonDelete.setAlpha(0.5f);
-                buttonWatch.setClickable(false);
-                buttonDelete.setClickable(false);
+                if (!buttons_is_visible) {
+                    buttonWatch.setAlpha(0.5f);
+                    buttonDelete.setAlpha(0.5f);
+                    buttonWatch.setClickable(false);
+                    buttonDelete.setClickable(false);
+                }
+
             }
         });
 

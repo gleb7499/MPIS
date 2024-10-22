@@ -9,9 +9,9 @@
 
     <EditText
         android:id="@+id/editTextNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="12"
+        android:ems="10"
         android:hint="Например, 135"
         android:inputType="number"
         android:textAlignment="center"
@@ -21,12 +21,14 @@
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintWidth_percent="0.7" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
         android:backgroundTint="@android:color/transparent"
         android:elevation="0dp"
         app:cardElevation="0dp"
@@ -49,12 +51,13 @@
 
     <Button
         android:id="@+id/buttonWatch"
-        android:layout_width="131dp"
+        android:layout_width="132dp"
         android:layout_height="55dp"
         android:alpha="0.5"
         android:clickable="false"
+        android:onClick="clickButtonWatch"
         android:text="Смотреть"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:cornerRadius="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,16 +68,17 @@
 
     <Button
         android:id="@+id/buttonDelete"
-        android:layout_width="131dp"
+        android:layout_width="132dp"
         android:layout_height="55dp"
         android:alpha="0.5"
         android:clickable="false"
         android:text="Удалить"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:cornerRadius="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonWatch"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
         app:layout_constraintVertical_bias="0.8" />
 
