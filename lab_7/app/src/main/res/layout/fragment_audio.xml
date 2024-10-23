@@ -7,15 +7,75 @@
     tools:context=".Fragments.AudioFragment">
 
 
+    <ImageButton
+        android:id="@+id/buttonPausePlay"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:alpha="0.5"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pause_24"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAudio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameSong"
+        app:layout_constraintVertical_bias="0.4" />
+
     <Button
         android:id="@+id/buttonAudio"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_marginBottom="32dp"
         android:text="Выбрать аудио"
-        android:textSize="20sp"
-        app:cornerRadius="17dp"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textViewNameSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <ImageButton
+        android:id="@+id/buttonStop"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:alpha="0.5"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:scaleType="centerCrop"
+        android:src="@drawable/stop_24"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAudio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameSong"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <SeekBar
+        android:id="@+id/seekBarMusic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameSong"
+        app:layout_constraintWidth_percent="0.75" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
