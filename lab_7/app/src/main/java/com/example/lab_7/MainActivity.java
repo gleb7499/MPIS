@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
 
-    private void setMargin(View view) {
+    private void setMargin(View view, boolean left, boolean top, boolean right, boolean bottom) {
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            layoutParams.leftMargin = insets.left;
-            layoutParams.rightMargin = insets.right;
-            layoutParams.topMargin = insets.top;
-            layoutParams.bottomMargin = insets.bottom;
+            layoutParams.leftMargin = left ? insets.left : 0;
+            layoutParams.topMargin = top ? insets.top : 0;
+            layoutParams.rightMargin = right ? insets.right : 0;
+            layoutParams.bottomMargin = bottom ? insets.bottom : 0;
             v.setLayoutParams(layoutParams);
             return WindowInsetsCompat.CONSUMED;
         });
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.ViewPager);
 
+        setMargin(tabLayout, false, false, false, true);
+        setMargin(viewPager, false, true, false, false);
+
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new AudioFragment());
         fragmentList.add(new VideoFragment());
@@ -55,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, fragmentList);
         viewPager.setAdapter(viewPagerAdapter);
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {}).attach();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            String[] titles = {"Аудио", "Видео", "Фото"};
+            String[] icons = {"@drawable/audio_24", "@drawable/video_24", "@drawable/photo_24"};
+            tab.setText(titles[position]);
+            tab.setIcon(ContextCompat.getDrawable(this, getResources().getIdentifier(icons[position], null, getPackageName())));
+        }).attach();
     }
 }
