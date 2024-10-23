@@ -11,11 +11,11 @@
         android:id="@+id/buttonPausePlay"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:alpha="0.5"
+
         android:background="@android:color/transparent"
-        android:clickable="false"
+
         android:scaleType="centerCrop"
-        android:src="@drawable/pause_24"
+        android:src="@drawable/play_arrow_24"
         app:layout_constraintBottom_toTopOf="@+id/buttonAudio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
@@ -41,7 +41,7 @@
         android:id="@+id/textViewNameSong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
+
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,9 +54,9 @@
         android:id="@+id/buttonStop"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:alpha="0.5"
+
         android:background="@android:color/transparent"
-        android:clickable="false"
+
         android:scaleType="centerCrop"
         android:src="@drawable/stop_24"
         app:layout_constraintBottom_toTopOf="@+id/buttonAudio"
@@ -70,8 +70,7 @@
         android:id="@+id/seekBarMusic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:clickable="false"
+
         app:layout_constraintBottom_toTopOf="@+id/buttonStop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

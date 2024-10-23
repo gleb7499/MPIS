@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +22,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.lab_7.R;
@@ -41,10 +42,12 @@ public class AudioFragment extends Fragment {
     private ActivityResultLauncher<Intent> launcher;
 
     private List<View> musicViews;
+    private Handler handler_seekBar, handler_return;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        handler_seekBar = new Handler(Looper.getMainLooper());
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
                 Uri uri = result.getData().getData();
@@ -60,13 +63,39 @@ public class AudioFragment extends Fragment {
                     Log.d("AudioFragment", e.getMessage());
                 }
                 mediaPlayer.start();
-                seekBarMusic.setMax(mediaPlayer.getDuration());
                 buttonPausePlay.setImageResource(R.drawable.pause_24);
                 textViewNameSong.setText(uri.getLastPathSegment());
-                setAlphaClickable(true);
+
+                seekBarMusic.setMax(mediaPlayer.getDuration());
+                seekBarMusic.setProgress(mediaPlayer.getCurrentPosition());
+//                setAlphaClickable(true);
+
+                handler_seekBar.removeCallbacks(runnable);
+                handler_seekBar.postDelayed(runnable, 100); // запустить Runnable объект первый раз через 0.1 секунду
             }
         });
     }
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                int maxDuration = mediaPlayer.getDuration();
+                Log.d("AudioFragment", "Current position: " + currentPosition);
+                handler_return.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        seekBarMusic.setMax(maxDuration);
+                        seekBarMusic.setProgress(currentPosition);
+                    }
+                });
+
+                Log.d("AudioFragment", "Seekbar progress: " + seekBarMusic.getProgress());
+                handler_seekBar.postDelayed(this, 100);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,9 +106,12 @@ public class AudioFragment extends Fragment {
         seekBarMusic = view.findViewById(R.id.seekBarMusic);
         textViewNameSong = view.findViewById(R.id.textViewNameSong);
 
+        handler_return = new Handler(Looper.getMainLooper());
+
         musicViews = List.of(buttonPausePlay, buttonStop, seekBarMusic, textViewNameSong);
 
-        setAlphaClickable(false);
+//        setAlphaClickable(false);
+        textViewNameSong.setText("Ничего не выбрано");
 
         buttonChooseAudio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +128,9 @@ public class AudioFragment extends Fragment {
                     mediaPlayer.stop();
                     mediaPlayer.release();
                     mediaPlayer = null;
+//                    setAlphaClickable(false);
+                    textViewNameSong.setText("Ничего не выбрано");
+                    seekBarMusic.setProgress(0);
                 }
             }
         });
@@ -104,7 +139,7 @@ public class AudioFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mediaPlayer != null) {
-                    if (ContextCompat.getDrawable(requireActivity(), R.drawable.pause_24) == buttonPausePlay.getDrawable()) {
+                    if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         buttonPausePlay.setImageResource(R.drawable.play_arrow_24);
                     } else {
@@ -118,7 +153,7 @@ public class AudioFragment extends Fragment {
         seekBarMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && mediaPlayer != null) {
+                if (mediaPlayer != null && fromUser) {
                     mediaPlayer.seekTo(progress);
                 }
             }
