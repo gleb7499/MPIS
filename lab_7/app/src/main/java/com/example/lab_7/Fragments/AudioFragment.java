@@ -1,7 +1,9 @@
 package com.example.lab_7.Fragments;
 
 import static android.app.Activity.RESULT_OK;
+import static java.lang.String.format;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -31,16 +33,18 @@ import java.util.List;
 
 public class AudioFragment extends Fragment {
 
-    public AudioFragment() {}
+    public AudioFragment() {
+    }
 
     private Button buttonChooseAudio;
     private TextView textViewNameSong;
     private ImageButton buttonPausePlay;
     private ImageButton buttonStop;
     private SeekBar seekBarMusic;
+    private TextView textViewPosition, textViewTotal;
+
     private MediaPlayer mediaPlayer;
     private ActivityResultLauncher<Intent> launcher;
-
     private List<View> musicViews;
     private Handler handler_seekBar;
 
@@ -63,10 +67,12 @@ public class AudioFragment extends Fragment {
                     Log.d("AudioFragment", e.getMessage());
                 }
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         seekBarMusic.setProgress(0);
                         buttonPausePlay.setImageResource(R.drawable.play_arrow_24);
+                        textViewPosition.setText("00:00");
                         handler_seekBar.removeCallbacks(runnable);
                     }
                 });
@@ -80,12 +86,14 @@ public class AudioFragment extends Fragment {
     }
 
     private final Runnable runnable = new Runnable() {
+        @SuppressLint("DefaultLocale")
         @Override
         public void run() {
             if (mediaPlayer != null) {
                 int currentPosition = mediaPlayer.getCurrentPosition();
                 seekBarMusic.setProgress(currentPosition);
-                handler_seekBar.postDelayed(this, 100);
+                textViewPosition.setText(format("%02d:%02d", currentPosition / 1000 / 60, currentPosition / 1000 % 60));
+                handler_seekBar.postDelayed(this, 50);
             }
         }
     };
@@ -98,6 +106,8 @@ public class AudioFragment extends Fragment {
         buttonStop = view.findViewById(R.id.buttonStop);
         seekBarMusic = view.findViewById(R.id.seekBarMusic);
         textViewNameSong = view.findViewById(R.id.textViewNameSong);
+        textViewPosition = view.findViewById(R.id.textViewPosition);
+        textViewTotal = view.findViewById(R.id.textViewTotal);
 
         musicViews = List.of(buttonPausePlay, buttonStop, seekBarMusic, textViewNameSong);
 
@@ -127,6 +137,7 @@ public class AudioFragment extends Fragment {
         });
 
         buttonPausePlay.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onClick(View v) {
                 if (mediaPlayer != null) {
@@ -136,10 +147,10 @@ public class AudioFragment extends Fragment {
                     } else {
                         Log.d("AudioFragment", "start");
                         mediaPlayer.start();
+                        textViewTotal.setText(String.format("%02d:%02d", mediaPlayer.getDuration() / 1000 / 60, mediaPlayer.getDuration() / 1000 % 60));
                         buttonPausePlay.setImageResource(R.drawable.pause_24);
                         handler_seekBar.removeCallbacks(runnable);
-                        handler_seekBar.postDelayed(runnable, 100); // запустить Runnable объект первый раз через 0.1 секунду
-
+                        handler_seekBar.postDelayed(runnable, 50); // запустить Runnable объект первый раз через 0.1 секунду
                     }
                 }
             }
