@@ -5,5 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="TabTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="Theme.Lab_7" parent="Base.Theme.Lab_7" />
 </resources>
