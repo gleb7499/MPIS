@@ -15,6 +15,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.lab_7.Adapters.ViewPagerAdapter;
 import com.example.lab_7.Fragments.AudioFragment;
+import com.example.lab_7.Fragments.PhotoFragment;
+import com.example.lab_7.Fragments.VideoFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
