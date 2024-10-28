@@ -1,66 +1,81 @@
 package com.example.lab_7.Fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import com.example.lab_7.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PhotoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+
 public class PhotoFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Button buttonTakePhoto;
+    private ImageView imageView;
+    private ActivityResultLauncher<Intent> launcher;
 
     public PhotoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PhotoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PhotoFragment newInstance(String param1, String param2) {
-        PhotoFragment fragment = new PhotoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                File file = new File(requireActivity().getExternalFilesDir(null), "image.jpg");
+                Uri uri = Uri.fromFile(file);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(uri));
+                } catch (FileNotFoundException e) {
+                    Log.e("PhotoFragment", "Error reading image", e);
+                    throw new RuntimeException(e);
+                }
+                imageView.setImageBitmap(bitmap);
+                imageView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photo, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_photo, container, false);
+
+        buttonTakePhoto = view.findViewById(R.id.buttonTakePhoto);
+        imageView = view.findViewById(R.id.imageView);
+
+        buttonTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_photo = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = new File(requireActivity().getExternalFilesDir(null), "image.jpg");
+                Uri uri = FileProvider.getUriForFile(requireActivity(), requireActivity().getPackageName() + ".provider", file);
+                intent_photo.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                intent_photo.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                intent_photo.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                launcher.launch(intent_photo);
+            }
+        });
+
+        return view;
     }
 }
